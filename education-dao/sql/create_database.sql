@@ -22,7 +22,7 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `students`;
 
 CREATE TABLE `students` (
-    `id` INT NOT NULL
+    `id` INT NOT NULL,
     `group` INT NOT NULL,
     CONSTRAINT `fk_students_users1` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
@@ -93,6 +93,7 @@ CREATE TABLE `study_assignments` (
     `date_of_change` DATETIME NULL,
     `teacher` INT NOT NULL,
     PRIMARY KEY (`id`),
+    UNIQUE (`name`),
     CONSTRAINT `fk_study_assignments_educational_materials1` FOREIGN KEY (`educational_material`) REFERENCES `educational_materials` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `fk_study_assignments_users1` FOREIGN KEY (`student`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `fk_study_assignments_users2` FOREIGN KEY (`teacher`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION

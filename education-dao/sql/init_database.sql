@@ -13,7 +13,7 @@ COMMIT;
 DELETE FROM `students`;
 COMMIT;
 
-INSERT INTO `students` (id, group) VALUES (4, 722403);
+INSERT INTO `students` (`id`, `group`) VALUES (4, 722403);
 COMMIT;
 
 -- Init table admin_operations

@@ -1,5 +1,6 @@
 package by.educ.ivan.education.factory;
 
+import by.educ.ivan.education.dao.*;
 import by.educ.ivan.education.util.PropertiesUtil;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -20,7 +21,7 @@ public class MySQLDAOFactory extends DAOFactory {
 
     //Properties
 
-    public MySQLDAOFactory() {
+    static {
         Properties mySQLproperties = new PropertiesUtil()
                 .getProperties(MYSQL_CONFIG_PROPERTIES);
         mDatasource = new BasicDataSource();
@@ -53,4 +54,27 @@ public class MySQLDAOFactory extends DAOFactory {
 //		return daoFactory;
 //	}
 
+    public AcademicDisciplineDAO getAcademicDisciplineDAO() {
+        return new AcademicDisciplineMySQLDAO();
+    }
+
+    public AdminOperationDAO getAdminOperationDAO() {
+        return null;
+    }
+
+    public EducationalMaterialDAO getEducationalMaterialDAO() {
+        return null;
+    }
+
+    public StudentDAO getStudentDAO() {
+        return null;
+    }
+
+    public StudyAssignmentDAO getStudyAssignmentDAO() {
+        return null;
+    }
+
+    public UserDAO getUserDAO() {
+        return null;
+    }
 }
