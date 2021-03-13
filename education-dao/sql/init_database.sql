@@ -39,14 +39,14 @@ COMMIT;
 DELETE FROM `educational_materials`;
 COMMIT;
 
-INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 3, 2, "Ready for review", '2020-12-18 13:11:30', "Workshop");
-INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 5, 2, "Reviewed", '2020-12-18 13:18:00', "Test");
-INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 5, 2, "Back to rework", '2020-12-18 13:19:14', "Exam");
+INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 3, 2, "READY_FOR_REVIEW", '2020-12-18 13:11:30', "WORKSHOP");
+INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 5, 2, "REVIEWED", '2020-12-18 13:18:00', "TEST");
+INSERT INTO `educational_materials` (name, academic_discipline, author, reviewer, review_status, creation_date, type) VALUES ("Foundations of Information Systems", 1, 5, 2, "BACK_TO_REWORK", '2020-12-18 13:19:14', "EXAM");
 COMMIT;
 
 -- Table study_assignments
 DELETE FROM `study_assignments`;
 COMMIT;
 
-INSERT INTO `study_assignments` (name, educational_material, student, review_status, creation_date, due_date, teacher) VALUES ("Homework", 2, 4, "Open", '2020-12-28 12:10:00', '2020-12-28 12:50:00', 5);
+INSERT INTO `study_assignments` (name, educational_material, student, review_status, creation_date, due_date, teacher) VALUES ("Homework", 2, 4, "OPEN", '2020-12-28 12:10:00', '2020-12-28 12:50:00', 5);
 COMMIT;

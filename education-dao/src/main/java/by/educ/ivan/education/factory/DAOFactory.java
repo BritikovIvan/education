@@ -1,15 +1,16 @@
 package by.educ.ivan.education.factory;
 
-import by.educ.ivan.education.dao.*;
+import by.educ.ivan.education.dao.AcademicDisciplineDAO;
+import by.educ.ivan.education.dao.AdminOperationDAO;
+import by.educ.ivan.education.dao.EducationalMaterialDAO;
+import by.educ.ivan.education.dao.StudentDAO;
+import by.educ.ivan.education.dao.StudyAssignmentDAO;
+import by.educ.ivan.education.dao.UserDAO;
 
 public abstract class DAOFactory {
 
-    // List of DAO types supported by the factory
     public static final int MYSQL = 1;
 
-    // There will be a method for each DAO that can be
-    // created. The concrete factories will have to
-    // implement these methods.
     public abstract AcademicDisciplineDAO getAcademicDisciplineDAO();
 
     public abstract AdminOperationDAO getAdminOperationDAO();
@@ -26,7 +27,7 @@ public abstract class DAOFactory {
 
         switch (whichFactory) {
             case MYSQL:
-                return new MySQLDAOFactory();//MySQLDAOFactory.getInstance();
+                return new MySQLDAOFactory();
             default:
                 return null;
         }

@@ -11,7 +11,7 @@ public interface UserDAO {
 
     User findUser(String userId);
 
-    boolean updateUser(String userId, String  userFullName);
+    boolean updateUser(String userId, String userFullName);
 
     Collection<User> selectUsers();
 }

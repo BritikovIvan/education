@@ -1,9 +1,9 @@
 package by.educ.ivan.education.dao;
 
+import by.educ.ivan.education.exception.DaoException;
 import by.educ.ivan.education.factory.MySQLDAOFactory;
 import by.educ.ivan.education.model.AdminOperation;
 import by.educ.ivan.education.model.AdminOperationType;
-import by.educ.ivan.education.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,20 +11,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class AdminOperationMySQLDAO implements AdminOperationDAO {
 
-    public AdminOperationMySQLDAO() {
+    private static final String INSERT = "insert into admin_operations (admin, operation, user, date, reason) " +
+            "values (?, ?, ?, ?, ?)";
+
+    private static final String DELETE = "delete from admin_operations where id = ?";
+
+    private static final String SELECT = "select id, admin, operation, user, date, reason from admin_operations where id = ?";
+
+    private static final String UPDATE = "update admin_operations set operation = ? where id = ?";
+
+    private static final String SELECT_ALL = "select id, admin, operation, user, date, reason from admin_operations";
+
+    private final UserDAO userDAO;
+
+    public AdminOperationMySQLDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
     public int insertAdminOperation(AdminOperation adminOperation) {
-        String sql = "insert into admin_operations (admin, operation, user, date, reason) values (?, ?, ?, ?, ?);";
-
-        try(Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(sql);
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(INSERT);
             ptmt.setInt(1, adminOperation.getAdmin().getId());
             ptmt.setString(2, adminOperation.getType().name());
             ptmt.setInt(3, adminOperation.getUser().getId());
@@ -32,62 +43,57 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
             ptmt.setString(5, adminOperation.getReason());
             return ptmt.executeUpdate();
         } catch (SQLException ex) {
-            return -1;
+            throw new DaoException(ex);
         }
     }
 
     @Override
     public boolean deleteAdminOperation(String adminOperationId) {
-        String sql = "delete from admin_operations where id = ?;";
-
-        try(Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(sql);
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(DELETE);
             ptmt.setString(1, adminOperationId);
             int count = ptmt.executeUpdate();
             return count == 1;
         } catch (SQLException ex) {
-            return false;
+            throw new DaoException(ex);
         }
     }
 
     @Override
     public AdminOperation findAdminOperation(String adminOperationId) {
-        String sql = "select id, admin, operation, user, date, reason from admin_operations where id = ?;";
-
-        try(Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(sql);
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(SELECT);
             ptmt.setString(1, adminOperationId);
             ResultSet rs = ptmt.executeQuery();
-            rs.next();
-            return setOperation(rs);
+            if (rs.next()) {
+                return setOperation(rs);
+            } else {
+                return null;
+            }
         } catch (SQLException ex) {
-            return null;
+            throw new DaoException(ex);
         }
     }
 
     @Override
     public boolean updateAdminOperation(String adminOperationId, String adminOperationType) {
-        String sql = "update admin_operations set operation = ? where id = ?;";
-
-        try(Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(sql);
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(UPDATE);
             ptmt.setString(1, adminOperationType);
             ptmt.setString(2, adminOperationId);
             int count = ptmt.executeUpdate();
             return count == 1;
         } catch (SQLException ex) {
-            return false;
+            throw new DaoException(ex);
         }
     }
 
     @Override
     public Collection<AdminOperation> selectAdminOperations() {
-        String sql = "select id, admin, operation, user, date, reason from admin_operations;";
-
-        try(Connection connection = MySQLDAOFactory.getConnection()) {
-            List<AdminOperation> adminOperations = new ArrayList<AdminOperation>();
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            List<AdminOperation> adminOperations = new ArrayList<>();
             AdminOperation adminOperationBean;
-            PreparedStatement ptmt = connection.prepareStatement(sql);
+            PreparedStatement ptmt = connection.prepareStatement(SELECT_ALL);
             ResultSet rs = ptmt.executeQuery();
             while (rs.next()) {
                 adminOperationBean = setOperation(rs);
@@ -95,12 +101,12 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
             }
             return adminOperations;
         } catch (SQLException ex) {
-            return Collections.emptyList();
+            throw new DaoException(ex);
         }
     }
 
     private java.sql.Date convert(java.util.Date date) {
-        if(date == null) {
+        if (date == null) {
             return null;
         }
         return new java.sql.Date(date.getTime());
@@ -108,13 +114,10 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
 
     private AdminOperation setOperation(ResultSet rs) throws SQLException {
         AdminOperation adminOperation = new AdminOperation();
-        UserDAO userDAO = new UserMySQLDAO();
         adminOperation.setId(rs.getInt(1));
-        User admin = userDAO.findUser(rs.getString(2));
-        adminOperation.setAdmin(admin);
+        adminOperation.setAdmin(userDAO.findUser(rs.getString(2)));
         adminOperation.setType(AdminOperationType.valueOf(rs.getString(3)));
-        User user = userDAO.findUser(rs.getString(4));
-        adminOperation.setUser(user);
+        adminOperation.setUser(userDAO.findUser(rs.getString(4)));
         adminOperation.setDate(rs.getDate(5));
         adminOperation.setReason(rs.getString(6));
         return adminOperation;
