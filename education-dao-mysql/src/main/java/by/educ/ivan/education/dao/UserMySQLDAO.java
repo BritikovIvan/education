@@ -25,6 +25,13 @@ public class UserMySQLDAO implements UserDAO {
 
     private static final String SELECT_ALL = "select id, full_name, email, password, role, blocked from users";
 
+    private static final String SELECT_BY_EMAIL = "select id, full_name, email, password, role, blocked from users " +
+            "where email = ?";
+
+    private static final String UPDATE_STATUS = "update users set blocked = ? where id = ?";
+
+    private static final String UPDATE_ROLE = "update users set role = ? where id = ?";
+
     public UserMySQLDAO() {
     }
 
@@ -72,7 +79,7 @@ public class UserMySQLDAO implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(String userId, String userFullName) {
+    public boolean updateUserName(String userId, String userFullName) {
         try (Connection connection = MySQLDAOFactory.getConnection()) {
             PreparedStatement ptmt = connection.prepareStatement(UPDATE);
             ptmt.setString(1, userFullName);
@@ -96,6 +103,48 @@ public class UserMySQLDAO implements UserDAO {
                 users.add(userBean);
             }
             return users;
+        } catch (SQLException ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(SELECT_BY_EMAIL);
+            ptmt.setString(1, email);
+            ResultSet rs = ptmt.executeQuery();
+            if (rs.next()) {
+                return setUser(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public boolean updateUserStatus(User user) {
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(UPDATE_STATUS);
+            ptmt.setBoolean(1, user.isBlocked());
+            ptmt.setInt(2, user.getId());
+            int count = ptmt.executeUpdate();
+            return count == 1;
+        } catch (SQLException ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public boolean updateUserRole(User user) {
+        try (Connection connection = MySQLDAOFactory.getConnection()) {
+            PreparedStatement ptmt = connection.prepareStatement(UPDATE_ROLE);
+            ptmt.setString(1, user.getRole().toString());
+            ptmt.setInt(2, user.getId());
+            int count = ptmt.executeUpdate();
+            return count == 1;
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }

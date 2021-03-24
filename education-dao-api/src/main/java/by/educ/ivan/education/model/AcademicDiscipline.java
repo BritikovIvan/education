@@ -1,5 +1,7 @@
 package by.educ.ivan.education.model;
 
+import java.util.Objects;
+
 public class AcademicDiscipline {
 
     private int id;
@@ -46,5 +48,19 @@ public class AcademicDiscipline {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AcademicDiscipline that = (AcademicDiscipline) o;
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(abbreviation, that.abbreviation)
+                && Objects.equals(description, that.description) && Objects.equals(author, that.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, abbreviation, description, author);
     }
 }

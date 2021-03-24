@@ -1,6 +1,7 @@
 package by.educ.ivan.education.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class AdminOperation {
 
@@ -57,5 +58,19 @@ public class AdminOperation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdminOperation that = (AdminOperation) o;
+        return id == that.id && type == that.type && Objects.equals(date, that.date) && Objects.equals(reason, that.reason)
+                && Objects.equals(admin, that.admin) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type, date, reason, admin, user);
     }
 }

@@ -1,6 +1,7 @@
 package by.educ.ivan.education.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class EducationalMaterial {
 
@@ -93,5 +94,24 @@ public class EducationalMaterial {
 
     public void setReviewer(User reviewer) {
         this.reviewer = reviewer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EducationalMaterial that = (EducationalMaterial) o;
+        return id == that.id && Objects.equals(name, that.name)
+                && reviewStatus == that.reviewStatus && Objects.equals(creationDate, that.creationDate)
+                && type == that.type && Objects.equals(reviewFinishDate, that.reviewFinishDate)
+                && Objects.equals(description, that.description)
+                && Objects.equals(academicDiscipline, that.academicDiscipline) && Objects.equals(author, that.author)
+                && Objects.equals(reviewer, that.reviewer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, reviewStatus, creationDate, type, reviewFinishDate, description,
+                academicDiscipline, author, reviewer);
     }
 }

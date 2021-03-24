@@ -1,6 +1,7 @@
 package by.educ.ivan.education.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class StudyAssignment {
 
@@ -102,5 +103,24 @@ public class StudyAssignment {
 
     public void setTeacher(User teacher) {
         this.teacher = teacher;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StudyAssignment that = (StudyAssignment) o;
+        return id == that.id && grade == that.grade && Objects.equals(name, that.name)
+                && reviewStatus == that.reviewStatus && Objects.equals(creationDate, that.creationDate)
+                && Objects.equals(dueDate, that.dueDate) && Objects.equals(description, that.description)
+                && Objects.equals(dateOfChange, that.dateOfChange)
+                && Objects.equals(educationalMaterial, that.educationalMaterial) && Objects.equals(student, that.student)
+                && Objects.equals(teacher, that.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, reviewStatus, creationDate, dueDate, grade, description, dateOfChange,
+                educationalMaterial, student, teacher);
     }
 }

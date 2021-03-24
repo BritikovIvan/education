@@ -13,7 +13,6 @@ public class UserServiceImpl implements UserService {
         this.userDAO = userDAO;
     }
 
-
     @Override
     public Collection<User> getAllUsers() {
         return userDAO.selectUsers();
@@ -25,4 +24,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userDAO.findUserByEmail(email);
+    }
+
+    @Override
+    public boolean updateUserStatus(User user) {
+        return userDAO.updateUserStatus(user);
+    }
+
+    @Override
+    public boolean updateUserRole(User user) {
+        return userDAO.updateUserRole(user);
+    }
 }

@@ -9,4 +9,10 @@ public interface UserService {
     Collection<User> getAllUsers();
 
     User createUser(User user);
+
+    User getUserByEmail(String email);
+
+    boolean updateUserStatus(User user);
+
+    boolean updateUserRole(User user);
 }
