@@ -7,8 +7,6 @@ import by.educ.ivan.education.exception.AdminOperationException;
 import by.educ.ivan.education.factory.DAOFactory;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.AdminOperation;
-import by.educ.ivan.education.service.AdminOperationService;
-import by.educ.ivan.education.service.AdminOperationServiceImpl;
 import by.educ.ivan.education.service.UserService;
 import by.educ.ivan.education.service.UserServiceImpl;
 
@@ -31,9 +29,8 @@ public class App {
         // AdminOperationService
         UserDAO userDAO = mySqlDAOFactory.getUserDAO();
         AdminOperationDAO operationDAO = mySqlDAOFactory.getAdminOperationDAO();
-        UserService userService = new UserServiceImpl(userDAO);
-        AdminOperationService adminOperationService = new AdminOperationServiceImpl(userService, operationDAO);
+//        UserService userService = new UserServiceImpl(userDAO, sessionService);
+//        AdminOperationService adminOperationService = new AdminOperationServiceImpl(userService, operationDAO, sessionService);
         AdminOperation adminOperation = new AdminOperation();
-        adminOperationService.addAdminOperation(adminOperation);
     }
 }

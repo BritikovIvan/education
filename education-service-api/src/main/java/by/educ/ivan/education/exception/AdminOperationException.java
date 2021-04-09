@@ -1,6 +1,7 @@
 package by.educ.ivan.education.exception;
 
-public class AdminOperationException extends Exception {
+public class AdminOperationException extends RuntimeException {
+
     public AdminOperationException(String message) {
         super(message);
     }

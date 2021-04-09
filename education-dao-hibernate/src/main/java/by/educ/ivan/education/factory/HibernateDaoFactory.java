@@ -1,0 +1,45 @@
+package by.educ.ivan.education.factory;
+
+import by.educ.ivan.education.dao.*;
+import by.educ.ivan.education.dao.factory.DaoFactory;
+
+import javax.persistence.EntityManagerFactory;
+
+public class HibernateDaoFactory implements DaoFactory {
+
+    private final EntityManagerFactory entityManagerFactory;
+
+    public HibernateDaoFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public AcademicDisciplineDAO getAcademicDisciplineDAO() {
+        return new AcademicDisciplineHibernateDao(entityManagerFactory);
+    }
+
+    @Override
+    public AdminOperationDAO getAdminOperationDAO() {
+        return new AdminOperationHibernateDao(entityManagerFactory);
+    }
+
+    @Override
+    public EducationalMaterialDAO getEducationalMaterialDAO() {
+        return new EducationalMaterialHibernateDao(entityManagerFactory);
+    }
+
+    @Override
+    public StudentDAO getStudentDAO() {
+        return new StudentHibernateDao(entityManagerFactory);
+    }
+
+    @Override
+    public StudyAssignmentDAO getStudyAssignmentDAO() {
+        return new StudyAssignmentHibernateDao(entityManagerFactory);
+    }
+
+    @Override
+    public UserDAO getUserDAO() {
+        return new UserHibernateDao(entityManagerFactory);
+    }
+}

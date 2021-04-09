@@ -5,13 +5,13 @@ import by.educ.ivan.education.model.AdminOperation;
 import java.util.Collection;
 
 public interface AdminOperationDAO {
-    int insertAdminOperation(AdminOperation adminOperation);
+    Long insertAdminOperation(AdminOperation adminOperation);
 
     boolean deleteAdminOperation(String adminOperationId);
 
     AdminOperation findAdminOperation(String adminOperationId);
 
-    boolean updateAdminOperation(String adminOperationId, String adminOperationType);
+    boolean updateAdminOperation(AdminOperation adminOperation);
 
     Collection<AdminOperation> selectAdminOperations();
 }

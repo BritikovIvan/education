@@ -1,27 +1,57 @@
 package by.educ.ivan.education.model;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "study_assignments")
+@NamedQuery(name = "StudyAssignment.findAll", query = "select s from StudyAssignment s")
 public class StudyAssignment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    private int id;
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "review_status")
+    @Enumerated(EnumType.STRING)
     private AssignmentStatus reviewStatus;
-    private Date creationDate;
-    private Date dueDate;
+
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
+
+    @Column(name = "grade")
     private int grade;
+
+    @Column(name = "description")
     private String description;
-    private Date dateOfChange;
+
+    @Column(name = "date_of_change")
+    private LocalDateTime dateOfChange;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "educational_material", referencedColumnName = "id")
     private EducationalMaterial educationalMaterial;
-    private User student;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "student", referencedColumnName = "id")
+    private Student student;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "teacher", referencedColumnName = "id")
     private User teacher;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,19 +71,19 @@ public class StudyAssignment {
         this.reviewStatus = reviewStatus;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -73,11 +103,11 @@ public class StudyAssignment {
         this.description = description;
     }
 
-    public Date getDateOfChange() {
+    public LocalDateTime getDateOfChange() {
         return dateOfChange;
     }
 
-    public void setDateOfChange(Date dateOfChange) {
+    public void setDateOfChange(LocalDateTime dateOfChange) {
         this.dateOfChange = dateOfChange;
     }
 
@@ -89,11 +119,11 @@ public class StudyAssignment {
         this.educationalMaterial = educationalMaterial;
     }
 
-    public User getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(User student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
@@ -108,19 +138,19 @@ public class StudyAssignment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof StudyAssignment)) return false;
         StudyAssignment that = (StudyAssignment) o;
-        return id == that.id && grade == that.grade && Objects.equals(name, that.name)
-                && reviewStatus == that.reviewStatus && Objects.equals(creationDate, that.creationDate)
-                && Objects.equals(dueDate, that.dueDate) && Objects.equals(description, that.description)
-                && Objects.equals(dateOfChange, that.dateOfChange)
-                && Objects.equals(educationalMaterial, that.educationalMaterial) && Objects.equals(student, that.student)
-                && Objects.equals(teacher, that.teacher);
+        return getId().equals(that.getId()) && getGrade() == that.getGrade() && getName().equals(that.getName())
+                && getReviewStatus() == that.getReviewStatus() && getCreationDate().equals(that.getCreationDate())
+                && getDueDate().equals(that.getDueDate()) && Objects.equals(getDescription(), that.getDescription())
+                && Objects.equals(getDateOfChange(), that.getDateOfChange())
+                && getEducationalMaterial().equals(that.getEducationalMaterial())
+                && getStudent().equals(that.getStudent()) && getTeacher().equals(that.getTeacher());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, reviewStatus, creationDate, dueDate, grade, description, dateOfChange,
-                educationalMaterial, student, teacher);
+        return Objects.hash(getId(), getName(), getReviewStatus(), getCreationDate(), getDueDate(), getGrade(), getDescription(),
+                getDateOfChange(), getEducationalMaterial(), getStudent(), getTeacher());
     }
 }

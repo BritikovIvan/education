@@ -1,6 +1,7 @@
 package by.educ.ivan.education.service;
 
 import by.educ.ivan.education.dao.UserDAO;
+import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
 
 import java.util.Collection;
@@ -9,8 +10,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
 
-    public UserServiceImpl(UserDAO userDAO) {
+    private final SessionService sessionService;
+
+    public UserServiceImpl(UserDAO userDAO, SessionService sessionService) {
         this.userDAO = userDAO;
+        this.sessionService = sessionService;
     }
 
     @Override
@@ -20,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        userDAO.insertUser(user);
+        user.setId(userDAO.insertUser(user));
         return user;
     }
 
@@ -30,12 +34,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserStatus(User user) {
-        return userDAO.updateUserStatus(user);
+    public User updateUserStatus(User user, boolean isBlocked) {
+        User updateUser = userDAO.findUser(String.valueOf(user.getId()));
+        updateUser.setBlocked(isBlocked);
+        userDAO.updateUser(updateUser);
+        return updateUser;
     }
 
     @Override
-    public boolean updateUserRole(User user) {
-        return userDAO.updateUserRole(user);
+    public User updateUserRole(User user, Role newRole) {
+        User updateUser = userDAO.findUser(String.valueOf(user.getId()));
+        updateUser.setRole(newRole);
+        userDAO.updateUser(updateUser);
+        return updateUser;
     }
+
+    @Override
+    public boolean isUserBlocked(User user) {
+        return getUserByEmail(user.getEmail()).isBlocked();
+    }
+
+    @Override
+    public boolean isProfessor() {
+        return sessionService.getCurrentUser().getRole() == Role.PROFESSOR;
+    }
+
+    @Override
+    public boolean isTeacher() {
+        return sessionService.getCurrentUser().getRole() == Role.TEACHER;
+    }
+
+    @Override
+    public boolean isMagistralStaff(User user) {
+        return user.getRole() == Role.PROFESSOR || user.getRole() == Role.TEACHER;
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userDAO.findUser(String.valueOf(id));
+    }
+
+
 }

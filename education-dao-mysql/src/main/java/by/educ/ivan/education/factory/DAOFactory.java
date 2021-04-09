@@ -6,8 +6,9 @@ import by.educ.ivan.education.dao.EducationalMaterialDAO;
 import by.educ.ivan.education.dao.StudentDAO;
 import by.educ.ivan.education.dao.StudyAssignmentDAO;
 import by.educ.ivan.education.dao.UserDAO;
+import by.educ.ivan.education.dao.factory.DaoFactory;
 
-public abstract class DAOFactory {
+public abstract class DAOFactory implements DaoFactory {
 
     public static final int MYSQL = 1;
 

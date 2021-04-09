@@ -3,7 +3,6 @@ package by.educ.ivan.education.dao;
 import by.educ.ivan.education.exception.DaoException;
 import by.educ.ivan.education.factory.MySQLDAOFactory;
 import by.educ.ivan.education.model.Student;
-import by.educ.ivan.education.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,19 +24,17 @@ public class StudentMySQLDAO implements StudentDAO {
 
     private static final String SELECT_ALL = "select id, `group` from students";
 
-    private final UserDAO userDAO;
-
-    public StudentMySQLDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+    private static final String SELECT_BY_GROUP = "select id, `group` from students where `group` = ?";
 
     @Override
-    public int insertStudent(Student student) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(INSERT);
-            ptmt.setInt(1, student.getUser().getId());
+    public Long insertStudent(Student student) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(INSERT))
+        {
+            ptmt.setLong(1, student.getId());
             ptmt.setInt(2, student.getGroup());
-            return ptmt.executeUpdate();
+            ptmt.executeUpdate();
+            return student.getId();
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
@@ -45,8 +42,9 @@ public class StudentMySQLDAO implements StudentDAO {
 
     @Override
     public boolean deleteStudent(String studentId) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(DELETE);
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(DELETE))
+        {
             ptmt.setString(1, studentId);
             int count = ptmt.executeUpdate();
             return count == 1;
@@ -57,8 +55,9 @@ public class StudentMySQLDAO implements StudentDAO {
 
     @Override
     public Student findStudent(String studentId) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(SELECT);
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(SELECT))
+        {
             ptmt.setString(1, studentId);
             ResultSet rs = ptmt.executeQuery();
             if (rs.next()) {
@@ -72,11 +71,12 @@ public class StudentMySQLDAO implements StudentDAO {
     }
 
     @Override
-    public boolean updateStudent(String studentId, String studentGroup) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(UPDATE);
-            ptmt.setString(1, studentGroup);
-            ptmt.setString(2, studentId);
+    public boolean updateStudent(Student student) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(UPDATE))
+        {
+            ptmt.setInt(1, student.getGroup());
+            ptmt.setLong(2, student.getId());
             int count = ptmt.executeUpdate();
             return count == 1;
         } catch (SQLException ex) {
@@ -86,10 +86,30 @@ public class StudentMySQLDAO implements StudentDAO {
 
     @Override
     public Collection<Student> selectStudents() {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(SELECT_ALL))
+        {
             List<Student> students = new ArrayList<>();
             Student studentsBean;
-            PreparedStatement ptmt = connection.prepareStatement(SELECT_ALL);
+            ResultSet rs = ptmt.executeQuery();
+            while (rs.next()) {
+                studentsBean = setStudent(rs);
+                students.add(studentsBean);
+            }
+            return students;
+        } catch (SQLException ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public Collection<Student> selectStudentsByGroup(int group) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(SELECT_BY_GROUP))
+        {
+            ptmt.setInt(1, group);
+            List<Student> students = new ArrayList<>();
+            Student studentsBean;
             ResultSet rs = ptmt.executeQuery();
             while (rs.next()) {
                 studentsBean = setStudent(rs);
@@ -103,7 +123,7 @@ public class StudentMySQLDAO implements StudentDAO {
 
     private Student setStudent(ResultSet rs) throws SQLException {
         Student student = new Student();
-        student.setUser(userDAO.findUser(rs.getString(1)));
+        student.setId(rs.getLong(1));
         student.setGroup(rs.getInt(2));
         return student;
     }

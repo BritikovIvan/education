@@ -1,5 +1,6 @@
 package by.educ.ivan.education.service;
 
+import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
 
 import java.util.Collection;
@@ -12,7 +13,17 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    boolean updateUserStatus(User user);
+    User updateUserStatus(User user, boolean isBlocked);
 
-    boolean updateUserRole(User user);
+    User updateUserRole(User user, Role newRole);
+
+    boolean isUserBlocked(User user);
+
+    boolean isProfessor();
+
+    boolean isTeacher();
+
+    boolean isMagistralStaff(User user);
+
+    User getUser(Long id);
 }

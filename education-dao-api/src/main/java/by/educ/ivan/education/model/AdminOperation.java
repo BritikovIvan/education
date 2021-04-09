@@ -1,22 +1,41 @@
 package by.educ.ivan.education.model;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "admin_operations")
+@NamedQuery(name = "AdminOperation.findAll", query = "select a from AdminOperation a")
 public class AdminOperation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    private int id;
+    @Column(name = "operation")
+    @Enumerated(EnumType.STRING)
     private AdminOperationType type;
-    private Date date;
+
+    @Column(name = "date")
+    private LocalDateTime date;
+
+    @Column(name = "reason")
     private String reason;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "admin", referencedColumnName = "id")
     private User admin;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user", referencedColumnName = "id")
     private User user;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -28,11 +47,11 @@ public class AdminOperation {
         this.type = type;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -63,14 +82,15 @@ public class AdminOperation {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AdminOperation)) return false;
         AdminOperation that = (AdminOperation) o;
-        return id == that.id && type == that.type && Objects.equals(date, that.date) && Objects.equals(reason, that.reason)
-                && Objects.equals(admin, that.admin) && Objects.equals(user, that.user);
+        return getId().equals(that.getId()) && getType() == that.getType() && getDate().equals(that.getDate())
+                && Objects.equals(getReason(), that.getReason()) && getAdmin().equals(that.getAdmin())
+                && getUser().equals(that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, date, reason, admin, user);
+        return Objects.hash(getId(), getType(), getDate(), getReason(), getAdmin(), getUser());
     }
 }

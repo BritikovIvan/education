@@ -45,11 +45,11 @@ public class MySQLDAOFactory extends DAOFactory {
     }
 
     public StudentDAO getStudentDAO() {
-        return new StudentMySQLDAO(getUserDAO());
+        return new StudentMySQLDAO();
     }
 
     public StudyAssignmentDAO getStudyAssignmentDAO() {
-        return new StudyAssignmentMySQLDAO(getUserDAO(), getEducationalMaterialDAO());
+        return new StudyAssignmentMySQLDAO(getUserDAO(), getStudentDAO(), getEducationalMaterialDAO());
     }
 
     public UserDAO getUserDAO() {

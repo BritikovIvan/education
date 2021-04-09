@@ -1,11 +1,19 @@
 package by.educ.ivan.education.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
-public class Student {
+@Entity
+@Table(name = "students")
+@NamedQuery(name = "Student.findAll", query = "select s from Student s")
+public class Student extends User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
+    @Column(name = "group")
     private int group;
-    private User user;
 
     public int getGroup() {
         return group;
@@ -15,24 +23,27 @@ public class Student {
         this.group = group;
     }
 
-    public User getUser() {
-        return user;
+    @Override
+    public Long getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Student)) return false;
+        if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return group == student.group && Objects.equals(user, student.user);
+        return getId().equals(student.getId()) && getGroup() == student.getGroup();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(group, user);
+        return Objects.hash(super.hashCode(), getId(), getGroup());
     }
 }

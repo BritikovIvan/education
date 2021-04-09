@@ -6,19 +6,15 @@ import java.util.Collection;
 
 public interface UserDAO {
 
-    int insertUser(User user);
+    Long insertUser(User user);
 
     boolean deleteUser(String userId);
 
     User findUser(String userId);
 
-    boolean updateUserName(String userId, String userFullName);
+    boolean updateUser(User user);
 
     Collection<User> selectUsers();
 
     User findUserByEmail(String email);
-
-    boolean updateUserStatus(User user);
-
-    boolean updateUserRole(User user);
 }

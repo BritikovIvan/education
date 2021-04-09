@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="education">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>by.educ.ivan.education.model.User</class>
+        <class>by.educ.ivan.education.model.AcademicDiscipline</class>
+        <class>by.educ.ivan.education.model.AdminOperation</class>
+        <class>by.educ.ivan.education.model.EducationalMaterial</class>
+        <class>by.educ.ivan.education.model.Student</class>
+        <class>by.educ.ivan.education.model.StudyAssignment</class>
+
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/education"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="1234"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+        </properties>
+    </persistence-unit>
+</persistence>

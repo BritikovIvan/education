@@ -1,17 +1,25 @@
 package by.educ.ivan.education.dao;
 
+import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.EducationalMaterial;
+import by.educ.ivan.education.model.User;
 
 import java.util.Collection;
 
 public interface EducationalMaterialDAO {
-    int insertEducationalMaterial(EducationalMaterial educationalMaterial);
+    Long insertEducationalMaterial(EducationalMaterial educationalMaterial);
 
     boolean deleteEducationalMaterial(String educationalMaterialId);
 
     EducationalMaterial findEducationalMaterial(String educationalMaterialId);
 
-    boolean updateEducationalMaterial(String educationalMaterialId, String educationalMaterialName);
-
     Collection<EducationalMaterial> selectEducationalMaterials();
+
+    Collection<EducationalMaterial> selectEducationalMaterialsByReviewer(User professor);
+
+    Collection<EducationalMaterial> selectEducationalMaterialsByTeacher(User teacher);
+
+    boolean updateEducationalMaterial(EducationalMaterial material);
+
+    Collection<EducationalMaterial> selectEducationalMaterialsByDiscipline(AcademicDiscipline discipline);
 }

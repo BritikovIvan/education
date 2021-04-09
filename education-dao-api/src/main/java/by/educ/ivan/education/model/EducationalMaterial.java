@@ -1,26 +1,55 @@
 package by.educ.ivan.education.model;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "educational_materials")
+@NamedQuery(name = "EducationalMaterial.findAll", query = "select e from EducationalMaterial e")
 public class EducationalMaterial {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    private int id;
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "review_status")
+    @Enumerated(EnumType.STRING)
     private MaterialStatus reviewStatus;
-    private Date creationDate;
+
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private MaterialType type;
-    private Date reviewFinishDate;
+
+    @Column(name = "review_finish_date")
+    private LocalDateTime reviewFinishDate;
+
+    @Column(name = "description")
     private String description;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "academic_discipline", referencedColumnName = "id")
     private AcademicDiscipline academicDiscipline;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "author", referencedColumnName = "id")
     private User author;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reviewer", referencedColumnName = "id")
     private User reviewer;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,11 +69,11 @@ public class EducationalMaterial {
         this.reviewStatus = reviewStatus;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -56,11 +85,11 @@ public class EducationalMaterial {
         this.type = type;
     }
 
-    public Date getReviewFinishDate() {
+    public LocalDateTime getReviewFinishDate() {
         return reviewFinishDate;
     }
 
-    public void setReviewFinishDate(Date reviewFinishDate) {
+    public void setReviewFinishDate(LocalDateTime reviewFinishDate) {
         this.reviewFinishDate = reviewFinishDate;
     }
 
@@ -99,19 +128,19 @@ public class EducationalMaterial {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof EducationalMaterial)) return false;
         EducationalMaterial that = (EducationalMaterial) o;
-        return id == that.id && Objects.equals(name, that.name)
-                && reviewStatus == that.reviewStatus && Objects.equals(creationDate, that.creationDate)
-                && type == that.type && Objects.equals(reviewFinishDate, that.reviewFinishDate)
-                && Objects.equals(description, that.description)
-                && Objects.equals(academicDiscipline, that.academicDiscipline) && Objects.equals(author, that.author)
-                && Objects.equals(reviewer, that.reviewer);
+        return getId().equals(that.getId()) && getName().equals(that.getName()) && getReviewStatus() == that.getReviewStatus()
+                && getCreationDate().equals(that.getCreationDate()) && getType() == that.getType()
+                && Objects.equals(getReviewFinishDate(), that.getReviewFinishDate())
+                && Objects.equals(getDescription(), that.getDescription())
+                && getAcademicDiscipline().equals(that.getAcademicDiscipline())
+                && getAuthor().equals(that.getAuthor()) && getReviewer().equals(that.getReviewer());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, reviewStatus, creationDate, type, reviewFinishDate, description,
-                academicDiscipline, author, reviewer);
+        return Objects.hash(getId(), getName(), getReviewStatus(), getCreationDate(), getType(), getReviewFinishDate(),
+                getDescription(), getAcademicDiscipline(), getAuthor(), getReviewer());
     }
 }

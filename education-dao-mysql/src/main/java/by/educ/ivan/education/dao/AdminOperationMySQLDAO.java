@@ -5,10 +5,8 @@ import by.educ.ivan.education.factory.MySQLDAOFactory;
 import by.educ.ivan.education.model.AdminOperation;
 import by.educ.ivan.education.model.AdminOperationType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,15 +31,28 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
     }
 
     @Override
-    public int insertAdminOperation(AdminOperation adminOperation) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(INSERT);
-            ptmt.setInt(1, adminOperation.getAdmin().getId());
+    public Long insertAdminOperation(AdminOperation adminOperation) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS))
+        {
+            ptmt.setLong(1, adminOperation.getAdmin().getId());
             ptmt.setString(2, adminOperation.getType().name());
-            ptmt.setInt(3, adminOperation.getUser().getId());
-            ptmt.setDate(4, convert(adminOperation.getDate()));
+            ptmt.setLong(3, adminOperation.getUser().getId());
+            ptmt.setTimestamp(4, convertToDatabaseColumn(adminOperation.getDate()));
             ptmt.setString(5, adminOperation.getReason());
-            return ptmt.executeUpdate();
+            int affectedRows = ptmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Creating admin operation failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = ptmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    adminOperation.setId(generatedKeys.getLong(1));
+                } else {
+                    throw new DaoException("Creating admin operation failed, no ID obtained.");
+                }
+            }
+            return adminOperation.getId();
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
@@ -49,8 +60,9 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
 
     @Override
     public boolean deleteAdminOperation(String adminOperationId) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(DELETE);
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(DELETE))
+        {
             ptmt.setString(1, adminOperationId);
             int count = ptmt.executeUpdate();
             return count == 1;
@@ -61,8 +73,9 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
 
     @Override
     public AdminOperation findAdminOperation(String adminOperationId) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(SELECT);
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(SELECT))
+        {
             ptmt.setString(1, adminOperationId);
             ResultSet rs = ptmt.executeQuery();
             if (rs.next()) {
@@ -76,11 +89,12 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
     }
 
     @Override
-    public boolean updateAdminOperation(String adminOperationId, String adminOperationType) {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
-            PreparedStatement ptmt = connection.prepareStatement(UPDATE);
-            ptmt.setString(1, adminOperationType);
-            ptmt.setString(2, adminOperationId);
+    public boolean updateAdminOperation(AdminOperation adminOperation) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(UPDATE))
+        {
+            ptmt.setString(1, adminOperation.getType().toString());
+            ptmt.setLong(2, adminOperation.getId());
             int count = ptmt.executeUpdate();
             return count == 1;
         } catch (SQLException ex) {
@@ -90,10 +104,11 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
 
     @Override
     public Collection<AdminOperation> selectAdminOperations() {
-        try (Connection connection = MySQLDAOFactory.getConnection()) {
+        try (Connection connection = MySQLDAOFactory.getConnection();
+             PreparedStatement ptmt = connection.prepareStatement(SELECT_ALL))
+        {
             List<AdminOperation> adminOperations = new ArrayList<>();
             AdminOperation adminOperationBean;
-            PreparedStatement ptmt = connection.prepareStatement(SELECT_ALL);
             ResultSet rs = ptmt.executeQuery();
             while (rs.next()) {
                 adminOperationBean = setOperation(rs);
@@ -105,22 +120,23 @@ public class AdminOperationMySQLDAO implements AdminOperationDAO {
         }
     }
 
-    private java.sql.Date convert(java.util.Date date) {
-        if (date == null) {
-            return null;
-        }
-        return new java.sql.Date(date.getTime());
+    private java.sql.Timestamp convertToDatabaseColumn(LocalDateTime localDateTime) {
+        return localDateTime == null ? null : Timestamp.valueOf(localDateTime);
     }
 
     private AdminOperation setOperation(ResultSet rs) throws SQLException {
         AdminOperation adminOperation = new AdminOperation();
-        adminOperation.setId(rs.getInt(1));
+        adminOperation.setId(rs.getLong(1));
         adminOperation.setAdmin(userDAO.findUser(rs.getString(2)));
         adminOperation.setType(AdminOperationType.valueOf(rs.getString(3)));
         adminOperation.setUser(userDAO.findUser(rs.getString(4)));
-        adminOperation.setDate(rs.getDate(5));
+        adminOperation.setDate(convertToModelAttribute(rs.getTimestamp(5)));
         adminOperation.setReason(rs.getString(6));
         return adminOperation;
+    }
+
+    private LocalDateTime convertToModelAttribute(Timestamp timestamp) {
+        return timestamp == null ? null : timestamp.toLocalDateTime();
     }
 
 }
