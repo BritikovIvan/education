@@ -5,9 +5,12 @@ import by.educ.ivan.education.exception.AdminOperationException;
 import by.educ.ivan.education.model.AdminOperation;
 import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class AdminOperationServiceImpl implements AdminOperationService {
 
     private final UserService userService;
@@ -16,6 +19,7 @@ public class AdminOperationServiceImpl implements AdminOperationService {
 
     private final SessionService sessionService;
 
+    @Autowired
     public AdminOperationServiceImpl(UserService userService, AdminOperationDAO operationDAO, SessionService sessionService) {
         this.userService = userService;
         this.operationDAO = operationDAO;

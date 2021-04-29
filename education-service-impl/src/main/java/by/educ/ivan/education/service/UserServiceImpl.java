@@ -3,15 +3,19 @@ package by.educ.ivan.education.service;
 import by.educ.ivan.education.dao.UserDAO;
 import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
 
     private final SessionService sessionService;
 
+    @Autowired
     public UserServiceImpl(UserDAO userDAO, SessionService sessionService) {
         this.userDAO = userDAO;
         this.sessionService = sessionService;

@@ -6,11 +6,14 @@ import by.educ.ivan.education.model.AssignmentStatus;
 import by.educ.ivan.education.model.EducationalMaterial;
 import by.educ.ivan.education.model.Student;
 import by.educ.ivan.education.model.StudyAssignment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Service
 public class StudyAssignmentServiceImpl implements StudyAssignmentService {
 
     private final StudyAssignmentDAO assignmentDAO;
@@ -21,6 +24,7 @@ public class StudyAssignmentServiceImpl implements StudyAssignmentService {
 
     private final StudentService studentService;
 
+    @Autowired
     public StudyAssignmentServiceImpl(StudyAssignmentDAO assignmentDAO, SessionService sessionService, UserService userService, StudentService studentService) {
         this.assignmentDAO = assignmentDAO;
         this.sessionService = sessionService;

@@ -2,12 +2,18 @@ package by.educ.ivan.education.service;
 
 import by.educ.ivan.education.dao.EducationalMaterialDAO;
 import by.educ.ivan.education.exception.EducationalMaterialException;
-import by.educ.ivan.education.model.*;
+import by.educ.ivan.education.model.AcademicDiscipline;
+import by.educ.ivan.education.model.EducationalMaterial;
+import by.educ.ivan.education.model.MaterialStatus;
+import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class    EducationalMaterialServiceImpl implements EducationalMaterialService {
+@Service
+public class EducationalMaterialServiceImpl implements EducationalMaterialService {
 
     private final SessionService sessionService;
 
@@ -15,6 +21,7 @@ public class    EducationalMaterialServiceImpl implements EducationalMaterialSer
 
     private final EducationalMaterialDAO materialDAO;
 
+    @Autowired
     public EducationalMaterialServiceImpl(SessionService sessionService, UserService userService, EducationalMaterialDAO materialDAO) {
         this.sessionService = sessionService;
         this.userService = userService;

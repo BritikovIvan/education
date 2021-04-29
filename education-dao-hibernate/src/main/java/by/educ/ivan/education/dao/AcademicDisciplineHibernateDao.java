@@ -1,15 +1,20 @@
 package by.educ.ivan.education.dao;
 
 import by.educ.ivan.education.model.AcademicDiscipline;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 
+@Repository
 public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
     private final EntityManagerFactory entityManagerFactory;
 
+    @Autowired
     public AcademicDisciplineHibernateDao(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }

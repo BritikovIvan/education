@@ -3,15 +3,19 @@ package by.educ.ivan.education.dao;
 import by.educ.ivan.education.model.Student;
 import by.educ.ivan.education.model.StudyAssignment;
 import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 
+@Repository
 public class StudyAssignmentHibernateDao implements StudyAssignmentDAO {
 
     private final EntityManagerFactory entityManagerFactory;
 
+    @Autowired
     public StudyAssignmentHibernateDao(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }

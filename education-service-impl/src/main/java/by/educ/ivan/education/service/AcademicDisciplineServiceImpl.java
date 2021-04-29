@@ -4,9 +4,12 @@ import by.educ.ivan.education.dao.AcademicDisciplineDAO;
 import by.educ.ivan.education.exception.AcademicDisciplineException;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public class AcademicDisciplineServiceImpl implements AcademicDisciplineService {
 
     private final AcademicDisciplineDAO disciplineDAO;
@@ -15,6 +18,7 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
 
     private final UserService userService;
 
+    @Autowired
     public AcademicDisciplineServiceImpl(AcademicDisciplineDAO disciplineDAO, SessionService sessionService, UserService userService) {
         this.disciplineDAO = disciplineDAO;
         this.sessionService = sessionService;
