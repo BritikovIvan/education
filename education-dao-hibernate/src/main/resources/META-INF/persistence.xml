@@ -11,8 +11,8 @@
         <class>by.educ.ivan.education.model.StudyAssignment</class>
 
         <properties>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/education"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/education?serverTimezone=Europe/Moscow"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="1234"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>

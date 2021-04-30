@@ -5,8 +5,8 @@
 
     <context:component-scan base-package="by.educ.ivan.education.dao"/>
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="education" />
+    <bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">
+        <constructor-arg name="persistenceUnitName" value="education" />
     </bean>
 
 </beans>

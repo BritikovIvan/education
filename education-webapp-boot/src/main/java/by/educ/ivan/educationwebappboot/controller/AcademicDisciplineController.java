@@ -3,6 +3,7 @@ package by.educ.ivan.educationwebappboot.controller;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.service.AcademicDisciplineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ public class AcademicDisciplineController {
         this.academicDisciplineService = academicDisciplineService;
     }
 
+    @CrossOrigin
     @GetMapping("/api/disciplines")
     Collection<AcademicDiscipline> findAll() {
         return academicDisciplineService.getAllAcademicDisciplines();
