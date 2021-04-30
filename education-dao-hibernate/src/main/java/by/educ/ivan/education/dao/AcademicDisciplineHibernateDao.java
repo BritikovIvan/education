@@ -3,6 +3,7 @@ package by.educ.ivan.education.dao;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.persist(academicDiscipline);
+            entityManager.flush();
             return academicDiscipline.getId();
         } finally {
             entityManager.close();
@@ -49,7 +51,7 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
     public AcademicDiscipline findAcademicDiscipline(String academicDisciplineId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return entityManager.find(AcademicDiscipline.class, Integer.valueOf(academicDisciplineId));
+            return entityManager.find(AcademicDiscipline.class, Long.valueOf(academicDisciplineId));
         } finally {
             entityManager.close();
         }

@@ -5,5 +5,5 @@ import by.educ.ivan.education.model.User;
 public interface SessionService {
     User getCurrentUser();
 
-    void setUser(User user);
+    User login(String email, String password);
 }

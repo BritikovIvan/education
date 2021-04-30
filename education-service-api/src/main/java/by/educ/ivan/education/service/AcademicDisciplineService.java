@@ -8,7 +8,9 @@ public interface AcademicDisciplineService {
 
     AcademicDiscipline createAcademicDiscipline(AcademicDiscipline academicDiscipline);
 
-    AcademicDiscipline editAcademicDiscipline(AcademicDiscipline academicDiscipline);
+    AcademicDiscipline editAcademicDiscipline(AcademicDiscipline academicDiscipline, Long id);
 
     Collection<AcademicDiscipline> getAllAcademicDisciplines();
+
+    AcademicDiscipline getAcademicDiscipline(Long id);
 }

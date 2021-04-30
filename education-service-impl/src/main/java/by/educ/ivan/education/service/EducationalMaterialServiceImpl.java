@@ -184,4 +184,9 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
         materialDAO.updateEducationalMaterial(educationalMaterial);
         return educationalMaterial;
     }
+
+    public Collection<EducationalMaterial> getAllUserEducationalMaterials() {
+        //if (sessionService.getCurrentUser().getRole() == UserRole)
+        return null;
+    }
 }

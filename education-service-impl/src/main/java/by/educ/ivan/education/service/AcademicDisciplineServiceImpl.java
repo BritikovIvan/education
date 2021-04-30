@@ -6,10 +6,12 @@ import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 @Service
+@Transactional
 public class AcademicDisciplineServiceImpl implements AcademicDisciplineService {
 
     private final AcademicDisciplineDAO disciplineDAO;
@@ -31,18 +33,19 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
             throw new AcademicDisciplineException("Wrong professor user role.");
         }
 
-        academicDiscipline.setAuthor(sessionService.getCurrentUser());
+//        academicDiscipline.setAuthor(sessionService.getCurrentUser());
+
         academicDiscipline.setId(disciplineDAO.insertAcademicDiscipline(academicDiscipline));
         return academicDiscipline;
     }
 
     @Override
-    public AcademicDiscipline editAcademicDiscipline(AcademicDiscipline academicDiscipline) {
+    public AcademicDiscipline editAcademicDiscipline(AcademicDiscipline academicDiscipline, Long id) {
         if (!isAuthor(academicDiscipline.getAuthor())) {
             throw new AcademicDisciplineException("This user is not the author of this discipline.");
         }
 
-        AcademicDiscipline discipline = disciplineDAO.findAcademicDiscipline(String.valueOf(academicDiscipline.getId()));
+        AcademicDiscipline discipline = disciplineDAO.findAcademicDiscipline(String.valueOf(id));
         if (academicDiscipline.getName() != null) {
             discipline.setName(academicDiscipline.getName());
         }
@@ -66,5 +69,10 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
     @Override
     public Collection<AcademicDiscipline> getAllAcademicDisciplines() {
         return disciplineDAO.selectAcademicDisciplines();
+    }
+
+    @Override
+    public AcademicDiscipline getAcademicDiscipline(Long id) {
+        return disciplineDAO.findAcademicDiscipline(String.valueOf(id));
     }
 }

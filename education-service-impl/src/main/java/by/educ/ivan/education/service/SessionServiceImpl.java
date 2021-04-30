@@ -1,41 +1,54 @@
 package by.educ.ivan.education.service;
 
+import by.educ.ivan.education.exception.DaoException;
 import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SessionServiceImpl<sessionUser> implements SessionService {
+public class SessionServiceImpl implements SessionService {
 
-//    private static final ThreadLocal<User> sessionUser = new ThreadLocal<User>() {
-//        @Override
-//        protected User initialValue() {
-//            User anonymous = new User();
-//            anonymous.setRole(Role.ANONYMOUS);
-//            return anonymous;
-//        }
-//    };
+    private final UserService userService;
 
-    private final User sessionUser = new User();
+    private static final ThreadLocal<User> sessionUser = new ThreadLocal<User>() {
+        @Override
+        protected User initialValue() {
+            User anonymous = new User();
+            anonymous.setRole(Role.ANONYMOUS);
+            return anonymous;
+        }
+    };
+
+    @Autowired
+    public SessionServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Override
+    public User login(String email, String password) {
+        try {
+            User user = userService.getUserByEmail(email);
+            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                setUser(user);
+                user.setPassword(null);
+                return user;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new DaoException(e);
+        }
+    }
 
     @Override
     public User getCurrentUser() {
-        return sessionUser;
+        return sessionUser.get();
     }
 
-    @Override
-    public void setUser(User user) {
 
+    private void setUser(User user) {
+        sessionUser.set(user);
     }
-
-    //    @Override
-//    public User getCurrentUser() {
-//        return sessionUser.get();
-//    }
-//
-//    @Override
-//    public void setUser(User user) {
-//        sessionUser.set(user);
-//    }
 
 }
