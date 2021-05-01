@@ -31,7 +31,7 @@ public class AcademicDisciplineMySQLDAO implements AcademicDisciplineDAO {
     }
 
     @Override
-    public Long insertAcademicDiscipline(AcademicDiscipline academicDiscipline) {
+    public AcademicDiscipline insertAcademicDiscipline(AcademicDiscipline academicDiscipline) {
         try (Connection connection = MySQLDAOFactory.getConnection();
              PreparedStatement ptmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS))
         {

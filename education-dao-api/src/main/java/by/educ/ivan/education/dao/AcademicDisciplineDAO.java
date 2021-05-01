@@ -5,7 +5,7 @@ import by.educ.ivan.education.model.AcademicDiscipline;
 import java.util.Collection;
 
 public interface AcademicDisciplineDAO {
-    Long insertAcademicDiscipline(AcademicDiscipline academicDiscipline);
+    AcademicDiscipline insertAcademicDiscipline(AcademicDiscipline academicDiscipline);
 
     boolean deleteAcademicDiscipline(String academicDisciplineId);
 

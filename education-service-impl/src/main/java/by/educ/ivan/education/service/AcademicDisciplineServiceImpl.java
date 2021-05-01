@@ -29,14 +29,14 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
 
     @Override
     public AcademicDiscipline createAcademicDiscipline(AcademicDiscipline academicDiscipline) {
-        if (!userService.isProfessor()) {
-            throw new AcademicDisciplineException("Wrong professor user role.");
-        }
+//        if (!userService.isProfessor()) {
+//            throw new AcademicDisciplineException("Wrong professor user role.");
+//        }
 
 //        academicDiscipline.setAuthor(sessionService.getCurrentUser());
+        academicDiscipline.setAuthor(userService.getUserByEmail("qjamal.chafik.75t@gmailwe.com"));
 
-        academicDiscipline.setId(disciplineDAO.insertAcademicDiscipline(academicDiscipline));
-        return academicDiscipline;
+        return  disciplineDAO.insertAcademicDiscipline(academicDiscipline);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SessionServiceImpl implements SessionService {
 
-    private final UserService userService;
+//    private final UserService userService;
 
     private static final ThreadLocal<User> sessionUser = new ThreadLocal<User>() {
         @Override
@@ -20,25 +20,26 @@ public class SessionServiceImpl implements SessionService {
         }
     };
 
-    @Autowired
-    public SessionServiceImpl(UserService userService) {
-        this.userService = userService;
-    }
+//    @Autowired
+//    public SessionServiceImpl(UserService userService) {
+//        this.userService = userService;
+//    }
 
     @Override
     public User login(String email, String password) {
-        try {
-            User user = userService.getUserByEmail(email);
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                setUser(user);
-                user.setPassword(null);
-                return user;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            throw new DaoException(e);
-        }
+//        try {
+//            User user = userService.getUserByEmail(email);
+//            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+//                setUser(user);
+//                user.setPassword(null);
+//                return user;
+//            } else {
+//                return null;
+//            }
+//        } catch (Exception e) {
+//            throw new DaoException(e);
+//        }
+        return null;
     }
 
     @Override
