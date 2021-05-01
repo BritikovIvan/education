@@ -6,9 +6,9 @@ import java.util.Collection;
 
 public interface EducationalMaterialService {
 
-    Collection<EducationalMaterial> getAllProfessorEducationalMaterials(User professor);
+    Collection<EducationalMaterial> getAllProfessorEducationalMaterials(Long professorId);
 
-    Collection<EducationalMaterial> getAllTeacherEducationalMaterials(User teacher);
+    Collection<EducationalMaterial> getAllTeacherEducationalMaterials(Long teacherId);
 
     Collection<EducationalMaterial> getAllEducationalMaterialsByDiscipline(AcademicDiscipline discipline);
 
@@ -25,4 +25,6 @@ public interface EducationalMaterialService {
     EducationalMaterial cancelMaterial(EducationalMaterial material);
 
     EducationalMaterial approveMaterial(EducationalMaterial material);
+
+    EducationalMaterial getEducationalDiscipline(Long id);
 }

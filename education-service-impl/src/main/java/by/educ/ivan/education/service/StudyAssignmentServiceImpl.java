@@ -34,7 +34,7 @@ public class StudyAssignmentServiceImpl implements StudyAssignmentService {
 
     @Override
     public Collection<StudyAssignment> getAllTeacherAssignments() {
-        if (!userService.isTeacher()) {
+        if (!sessionService.isTeacher()) {
             throw new StudyAssignmentException("Wrong teacher user role.");
         }
 
@@ -43,7 +43,7 @@ public class StudyAssignmentServiceImpl implements StudyAssignmentService {
 
     @Override
     public Collection<StudyAssignment> createStudyAssignments(EducationalMaterial material, int group, String description, LocalDateTime dueDate) {
-        if (!userService.isTeacher()) {
+        if (!sessionService.isTeacher()) {
             throw new StudyAssignmentException("Wrong teacher user role.");
         }
 

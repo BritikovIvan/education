@@ -5,7 +5,6 @@ import by.educ.ivan.education.exception.EducationalMaterialException;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.EducationalMaterial;
 import by.educ.ivan.education.model.MaterialStatus;
-import by.educ.ivan.education.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +28,21 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
     }
 
     @Override
-    public Collection<EducationalMaterial> getAllProfessorEducationalMaterials(User professor) {
-        if (!userService.isProfessor()) {
-            throw new EducationalMaterialException("Wrong professor user role.");
-        }
+    public Collection<EducationalMaterial> getAllProfessorEducationalMaterials(Long professorId) {
+//        if (!sessionService.isProfessor()) {
+//            throw new EducationalMaterialException("Wrong professor user role.");
+//        }
 
-        return materialDAO.selectEducationalMaterialsByReviewer(professor);
+        return materialDAO.selectEducationalMaterialsByReviewer(userService.getUser(professorId));
     }
 
     @Override
-    public Collection<EducationalMaterial> getAllTeacherEducationalMaterials(User teacher) {
-        if (!userService.isTeacher()) {
-            throw new EducationalMaterialException("Wrong teacher user role.");
-        }
+    public Collection<EducationalMaterial> getAllTeacherEducationalMaterials(Long teacherId) {
+//        if (!sessionService.isTeacher()) {
+//            throw new EducationalMaterialException("Wrong teacher user role.");
+//        }
 
-        return materialDAO.selectEducationalMaterialsByTeacher(teacher);
+        return materialDAO.selectEducationalMaterialsByTeacher(userService.getUser(teacherId));
     }
 
     @Override
@@ -53,7 +52,7 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
 
     @Override
     public EducationalMaterial createEducationalMaterial(EducationalMaterial educationalMaterial) {
-        if (!userService.isTeacher()) {
+        if (!sessionService.isTeacher()) {
             throw new EducationalMaterialException("Wrong teacher user role.");
         }
 
@@ -183,6 +182,11 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
         educationalMaterial.setReviewFinishDate(LocalDateTime.now());
         materialDAO.updateEducationalMaterial(educationalMaterial);
         return educationalMaterial;
+    }
+
+    @Override
+    public EducationalMaterial getEducationalDiscipline(Long id) {
+        return materialDAO.findEducationalMaterial(String.valueOf(id));
     }
 
     public Collection<EducationalMaterial> getAllUserEducationalMaterials() {

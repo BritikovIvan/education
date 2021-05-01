@@ -29,7 +29,7 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
 
     @Override
     public AcademicDiscipline createAcademicDiscipline(AcademicDiscipline academicDiscipline) {
-//        if (!userService.isProfessor()) {
+//        if (!sessionService.isProfessor()) {
 //            throw new AcademicDisciplineException("Wrong professor user role.");
 //        }
 

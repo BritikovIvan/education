@@ -48,7 +48,7 @@ public class UserHibernateDao implements UserDAO {
     public User findUser(String userId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return entityManager.find(User.class, Integer.valueOf(userId));
+            return entityManager.find(User.class, Long.valueOf(userId));
         } finally {
             entityManager.close();
         }

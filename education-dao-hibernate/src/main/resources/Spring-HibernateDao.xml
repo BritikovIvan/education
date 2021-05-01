@@ -5,12 +5,16 @@
 
     <context:component-scan base-package="by.educ.ivan.education.dao"/>
 
-    <bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">
-        <constructor-arg name="persistenceUnitName" value="education" />
+<!--    <bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">-->
+<!--        <constructor-arg name="persistenceUnitName" value="education" />-->
+<!--    </bean>-->
+
+    <bean id="emf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="education" />
     </bean>
 
     <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="entityManagerFactory" ref="emf" />
     </bean>
 
     <tx:annotation-driven transaction-manager="txManager" />

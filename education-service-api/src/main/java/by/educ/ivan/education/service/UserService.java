@@ -19,10 +19,6 @@ public interface UserService {
 
     boolean isUserBlocked(User user);
 
-    boolean isProfessor();
-
-    boolean isTeacher();
-
     boolean isMagistralStaff(User user);
 
     User getUser(Long id);

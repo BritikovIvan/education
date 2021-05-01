@@ -52,7 +52,7 @@ public class AcademicDisciplineMySQLDAO implements AcademicDisciplineDAO {
                     throw new DaoException("Creating academic discipline failed, no ID obtained.");
                 }
             }
-            return academicDiscipline.getId();
+            return academicDiscipline;
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }

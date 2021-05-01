@@ -6,4 +6,8 @@ public interface SessionService {
     User getCurrentUser();
 
     User login(String email, String password);
+
+    boolean isProfessor();
+
+    boolean isTeacher();
 }

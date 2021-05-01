@@ -13,12 +13,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
 
-    private final SessionService sessionService;
-
     @Autowired
-    public UserServiceImpl(UserDAO userDAO, SessionService sessionService) {
+    public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
-        this.sessionService = sessionService;
     }
 
     @Override
@@ -56,16 +53,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserBlocked(User user) {
         return getUserByEmail(user.getEmail()).isBlocked();
-    }
-
-    @Override
-    public boolean isProfessor() {
-        return sessionService.getCurrentUser().getRole() == Role.PROFESSOR;
-    }
-
-    @Override
-    public boolean isTeacher() {
-        return sessionService.getCurrentUser().getRole() == Role.TEACHER;
     }
 
     @Override
