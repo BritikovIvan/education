@@ -19,13 +19,13 @@ public class EducationMaterialController {
         this.materialService = materialService;
     }
 
-//    @GetMapping("/api/materials")
-//    Collection<EducationalMaterial> findAllTeacherMaterials(@RequestParam("authorId") Long id) {
-//        return materialService.getAllTeacherEducationalMaterials(id);
-//    }
+    @GetMapping("/api/materials/teacher")
+    Collection<EducationalMaterial> findAllTeacherMaterials(@RequestParam("teacherId") Long id) {
+        return materialService.getAllTeacherEducationalMaterials(id);
+    }
 
-    @GetMapping("/api/materials")
-    Collection<EducationalMaterial> findAllProfessorMaterials(@RequestParam("reviewerId") Long id) {
+    @GetMapping("/api/materials/professor")
+    Collection<EducationalMaterial> findAllProfessorMaterials(@RequestParam("professorId") Long id) {
         return materialService.getAllProfessorEducationalMaterials(id);
     }
 

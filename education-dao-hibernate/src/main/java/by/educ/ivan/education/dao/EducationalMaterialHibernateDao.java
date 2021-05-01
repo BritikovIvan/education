@@ -50,7 +50,7 @@ public class EducationalMaterialHibernateDao implements EducationalMaterialDAO {
     public EducationalMaterial findEducationalMaterial(String educationalMaterialId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return entityManager.find(EducationalMaterial.class, Integer.valueOf(educationalMaterialId));
+            return entityManager.find(EducationalMaterial.class, Long.valueOf(educationalMaterialId));
         } finally {
             entityManager.close();
         }
