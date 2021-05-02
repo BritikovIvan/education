@@ -19,22 +19,22 @@ public class AcademicDisciplineController {
     }
 
     @GetMapping("/api/disciplines")
-    Collection<AcademicDiscipline> findAll() {
+    public Collection<AcademicDiscipline> findAll() {
         return academicDisciplineService.getAllAcademicDisciplines();
     }
 
     @GetMapping("/api/disciplines/{id}")
-    AcademicDiscipline findDiscipline(@PathVariable Long id) {
+    public AcademicDiscipline findDiscipline(@PathVariable Long id) {
         return academicDisciplineService.getAcademicDiscipline(id);
     }
 
     @PostMapping("/api/disciplines")
-    AcademicDiscipline addDiscipline(@RequestBody AcademicDiscipline discipline) {
+    public AcademicDiscipline addDiscipline(@RequestBody AcademicDiscipline discipline) {
         return academicDisciplineService.createAcademicDiscipline(discipline);
     }
 
-    @PutMapping("/api/disciplines/{id}")
-    AcademicDiscipline updateDiscipline(@PathVariable Long id ,@RequestBody AcademicDiscipline discipline) {
+    @PatchMapping("/api/disciplines/{id}")
+    public AcademicDiscipline updateDiscipline(@PathVariable Long id ,@RequestBody AcademicDiscipline discipline) {
         return academicDisciplineService.editAcademicDiscipline(discipline, id);
     }
 }

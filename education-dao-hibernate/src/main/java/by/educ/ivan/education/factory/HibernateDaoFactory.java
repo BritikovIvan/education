@@ -17,7 +17,8 @@ public class HibernateDaoFactory implements DaoFactory {
 
     @Override
     public AcademicDisciplineDAO getAcademicDisciplineDAO() {
-        return new AcademicDisciplineHibernateDao(entityManagerFactory);
+        //return new AcademicDisciplineHibernateDao(entityManagerFactory);
+        return null;
     }
 
     @Override
@@ -27,7 +28,8 @@ public class HibernateDaoFactory implements DaoFactory {
 
     @Override
     public EducationalMaterialDAO getEducationalMaterialDAO() {
-        return new EducationalMaterialHibernateDao(entityManagerFactory);
+//        return new EducationalMaterialHibernateDao(entityManagerFactory);
+        return null;
     }
 
     @Override

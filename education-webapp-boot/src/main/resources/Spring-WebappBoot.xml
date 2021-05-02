@@ -8,4 +8,5 @@
     <import resource="classpath:Spring-ServiceImpl.xml" />
 
     <context:component-scan base-package="by.educ.ivan.educationwebappboot"/>
+
 </beans>

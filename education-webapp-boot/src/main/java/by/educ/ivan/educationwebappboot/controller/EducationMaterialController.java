@@ -20,17 +20,17 @@ public class EducationMaterialController {
     }
 
     @GetMapping("/api/materials/teacher")
-    Collection<EducationalMaterial> findAllTeacherMaterials(@RequestParam("teacherId") Long id) {
+    public Collection<EducationalMaterial> findAllTeacherMaterials(@RequestParam("teacherId") Long id) {
         return materialService.getAllTeacherEducationalMaterials(id);
     }
 
     @GetMapping("/api/materials/professor")
-    Collection<EducationalMaterial> findAllProfessorMaterials(@RequestParam("professorId") Long id) {
+    public Collection<EducationalMaterial> findAllProfessorMaterials(@RequestParam("professorId") Long id) {
         return materialService.getAllProfessorEducationalMaterials(id);
     }
 
     @GetMapping("/api/materials/{id}")
-    EducationalMaterial findMaterial(@PathVariable Long id) {
+    public EducationalMaterial findMaterial(@PathVariable Long id) {
         return materialService.getEducationalDiscipline(id);
     }
 }

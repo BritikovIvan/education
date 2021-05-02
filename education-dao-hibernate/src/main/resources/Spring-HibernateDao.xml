@@ -3,20 +3,22 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <import resource="Spring-DaoApi.xml" />
+
     <context:component-scan base-package="by.educ.ivan.education.dao"/>
 
 <!--    <bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">-->
 <!--        <constructor-arg name="persistenceUnitName" value="education" />-->
 <!--    </bean>-->
 
-    <bean id="emf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="education" />
-    </bean>
+<!--    <bean id="emf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">-->
+<!--        <property name="persistenceUnitName" value="education" />-->
+<!--    </bean>-->
 
-    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="emf" />
-    </bean>
+<!--    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
+<!--        <property name="entityManagerFactory" ref="entityManagerFactory" />-->
+<!--    </bean>-->
 
-    <tx:annotation-driven transaction-manager="txManager" />
+    <tx:annotation-driven />
 
 </beans>

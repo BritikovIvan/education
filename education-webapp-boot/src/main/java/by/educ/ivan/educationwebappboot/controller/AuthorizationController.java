@@ -22,7 +22,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/api/login")
-    LoginResponse login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@RequestBody LoginRequest request) {
         User user = sessionService.login(request.getEmail(), request.getPassword());
         return new LoginResponse("token", user);
     }

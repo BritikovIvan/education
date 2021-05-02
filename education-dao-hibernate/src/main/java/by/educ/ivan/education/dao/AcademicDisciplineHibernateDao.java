@@ -1,28 +1,21 @@
 package by.educ.ivan.education.dao;
 
 import by.educ.ivan.education.model.AcademicDiscipline;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 
 @Repository
 public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    public AcademicDisciplineHibernateDao(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public AcademicDiscipline insertAcademicDiscipline(AcademicDiscipline academicDiscipline) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.persist(academicDiscipline);
             return academicDiscipline;
@@ -33,7 +26,6 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
     @Override
     public boolean deleteAcademicDiscipline(String academicDisciplineId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             AcademicDiscipline discipline = entityManager.find(AcademicDiscipline.class, Integer.valueOf(academicDisciplineId));
             if (discipline != null) {
@@ -48,7 +40,6 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
     @Override
     public AcademicDiscipline findAcademicDiscipline(String academicDisciplineId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.find(AcademicDiscipline.class, Long.valueOf(academicDisciplineId));
         } finally {
@@ -58,7 +49,6 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
     @Override
     public boolean updateAcademicDiscipline(AcademicDiscipline academicDiscipline) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             AcademicDiscipline discipline = entityManager.merge(academicDiscipline);
             return discipline != null;
@@ -69,7 +59,6 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
 
     @Override
     public Collection<AcademicDiscipline> selectAcademicDisciplines() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createNamedQuery("AcademicDiscipline.findAll", AcademicDiscipline.class).getResultList();
         } finally {
