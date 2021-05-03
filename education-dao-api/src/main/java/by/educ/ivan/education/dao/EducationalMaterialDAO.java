@@ -7,7 +7,7 @@ import by.educ.ivan.education.model.User;
 import java.util.Collection;
 
 public interface EducationalMaterialDAO {
-    Long insertEducationalMaterial(EducationalMaterial educationalMaterial);
+    EducationalMaterial insertEducationalMaterial(EducationalMaterial educationalMaterial);
 
     boolean deleteEducationalMaterial(String educationalMaterialId);
 
@@ -19,7 +19,7 @@ public interface EducationalMaterialDAO {
 
     Collection<EducationalMaterial> selectEducationalMaterialsByTeacher(User teacher);
 
-    boolean updateEducationalMaterial(EducationalMaterial material);
+    EducationalMaterial updateEducationalMaterial(EducationalMaterial material);
 
     Collection<EducationalMaterial> selectEducationalMaterialsByDiscipline(AcademicDiscipline discipline);
 }

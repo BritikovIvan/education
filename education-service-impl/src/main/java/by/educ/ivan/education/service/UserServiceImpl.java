@@ -5,10 +5,12 @@ import by.educ.ivan.education.model.Role;
 import by.educ.ivan.education.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
@@ -63,6 +65,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(Long id) {
         return userDAO.findUser(String.valueOf(id));
+    }
+
+    @Override
+    public Collection<User> getProfessors() {
+        return userDAO.selectProfessors();
+    }
+
+    @Override
+    public Collection<User> getTeachers() {
+        return userDAO.selectTeachers();
     }
 
 

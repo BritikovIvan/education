@@ -22,4 +22,8 @@ public interface UserService {
     boolean isMagistralStaff(User user);
 
     User getUser(Long id);
+
+    Collection<User> getProfessors();
+
+    Collection<User> getTeachers();
 }

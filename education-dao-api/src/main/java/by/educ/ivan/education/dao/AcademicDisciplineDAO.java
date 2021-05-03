@@ -11,7 +11,7 @@ public interface AcademicDisciplineDAO {
 
     AcademicDiscipline findAcademicDiscipline(String academicDisciplineId);
 
-    boolean updateAcademicDiscipline(AcademicDiscipline academicDiscipline);
+    AcademicDiscipline updateAcademicDiscipline(AcademicDiscipline academicDiscipline);
 
     Collection<AcademicDiscipline> selectAcademicDisciplines();
 }

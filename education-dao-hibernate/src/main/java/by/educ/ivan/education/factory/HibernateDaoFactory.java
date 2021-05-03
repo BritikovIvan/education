@@ -44,6 +44,7 @@ public class HibernateDaoFactory implements DaoFactory {
 
     @Override
     public UserDAO getUserDAO() {
-        return new UserHibernateDao(entityManagerFactory);
+//        return new UserHibernateDao(entityManagerFactory);
+        return null;
     }
 }

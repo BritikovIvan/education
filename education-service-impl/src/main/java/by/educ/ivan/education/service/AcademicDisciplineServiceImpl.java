@@ -6,7 +6,6 @@ import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -42,9 +41,6 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
 
     @Override
     public AcademicDiscipline editAcademicDiscipline(AcademicDiscipline academicDiscipline, Long id) {
-        if (!isAuthor(academicDiscipline.getAuthor())) {
-            throw new AcademicDisciplineException("This user is not the author of this discipline.");
-        }
 
         AcademicDiscipline discipline = disciplineDAO.findAcademicDiscipline(String.valueOf(id));
         if (academicDiscipline.getName() != null) {
@@ -57,14 +53,9 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
             discipline.setDescription(academicDiscipline.getDescription());
         }
         if (academicDiscipline.getAuthor() != null) {
-            discipline.setAuthor(academicDiscipline.getAuthor());
+            discipline.setAuthor(userService.getUser(academicDiscipline.getAuthor().getId()));
         }
-        disciplineDAO.updateAcademicDiscipline(discipline);
-        return discipline;
-    }
-
-    private boolean isAuthor(User author) {
-        return sessionService.getCurrentUser().equals(author);
+        return disciplineDAO.updateAcademicDiscipline(discipline);
     }
 
     @Override

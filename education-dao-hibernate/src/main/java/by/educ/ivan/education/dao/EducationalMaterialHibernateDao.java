@@ -3,11 +3,9 @@ package by.educ.ivan.education.dao;
 import by.educ.ivan.education.model.AcademicDiscipline;
 import by.educ.ivan.education.model.EducationalMaterial;
 import by.educ.ivan.education.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 
@@ -18,10 +16,10 @@ public class EducationalMaterialHibernateDao implements EducationalMaterialDAO {
     private EntityManager entityManager;
 
     @Override
-    public Long insertEducationalMaterial(EducationalMaterial educationalMaterial) {
+    public EducationalMaterial insertEducationalMaterial(EducationalMaterial educationalMaterial) {
         try {
             entityManager.persist(educationalMaterial);
-            return educationalMaterial.getId();
+            return educationalMaterial;
         } finally {
             entityManager.close();
         }
@@ -81,10 +79,9 @@ public class EducationalMaterialHibernateDao implements EducationalMaterialDAO {
     }
 
     @Override
-    public boolean updateEducationalMaterial(EducationalMaterial material) {
+    public EducationalMaterial updateEducationalMaterial(EducationalMaterial material) {
         try {
-            EducationalMaterial educationalMaterial = entityManager.merge(material);
-            return educationalMaterial != null;
+            return entityManager.merge(material);
         } finally {
             entityManager.close();
         }

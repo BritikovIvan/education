@@ -17,4 +17,8 @@ public interface UserDAO {
     Collection<User> selectUsers();
 
     User findUserByEmail(String email);
+
+    Collection<User> selectProfessors();
+
+    Collection<User> selectTeachers();
 }

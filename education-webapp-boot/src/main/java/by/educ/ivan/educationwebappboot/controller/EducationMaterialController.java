@@ -33,4 +33,19 @@ public class EducationMaterialController {
     public EducationalMaterial findMaterial(@PathVariable Long id) {
         return materialService.getEducationalDiscipline(id);
     }
+
+    @PostMapping("/api/materials")
+    public EducationalMaterial addMaterial(@RequestBody EducationalMaterial educationalMaterial) {
+        return materialService.createEducationalMaterial(educationalMaterial);
+    }
+
+    @PatchMapping("/api/materials/{id}/professor")
+    public EducationalMaterial changeReviewStatus(@PathVariable Long id, @RequestBody EducationalMaterial educationalMaterial) {
+        return materialService.changeReviewStatus(educationalMaterial, id);
+    }
+
+    @PatchMapping("/api/materials/{id}/teacher")
+    public EducationalMaterial editMaterialByTeacher(@PathVariable Long id, @RequestBody EducationalMaterial educationalMaterial) {
+        return materialService.editEducationalMaterial(educationalMaterial, id);
+    }
 }

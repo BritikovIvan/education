@@ -22,11 +22,14 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
 
     private final EducationalMaterialDAO materialDAO;
 
+    private final AcademicDisciplineService disciplineService;
+
     @Autowired
-    public EducationalMaterialServiceImpl(SessionService sessionService, UserService userService, EducationalMaterialDAO materialDAO) {
+    public EducationalMaterialServiceImpl(SessionService sessionService, UserService userService, EducationalMaterialDAO materialDAO, AcademicDisciplineService disciplineService) {
         this.sessionService = sessionService;
         this.userService = userService;
         this.materialDAO = materialDAO;
+        this.disciplineService = disciplineService;
     }
 
     @Override
@@ -54,22 +57,25 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
 
     @Override
     public EducationalMaterial createEducationalMaterial(EducationalMaterial educationalMaterial) {
-        if (!sessionService.isTeacher()) {
-            throw new EducationalMaterialException("Wrong teacher user role.");
-        }
+//        if (!sessionService.isTeacher()) {
+//            throw new EducationalMaterialException("Wrong teacher user role.");
+//        }
 
         educationalMaterial.setReviewStatus(MaterialStatus.DRAFT);
         educationalMaterial.setCreationDate(LocalDateTime.now());
-        educationalMaterial.setAuthor(sessionService.getCurrentUser());
-        if (educationalMaterial.getAuthor() == null) { //
+//        educationalMaterial.setAuthor(sessionService.getCurrentUser());
+        educationalMaterial.setAuthor(userService.getUser(5L));
+        educationalMaterial.setAcademicDiscipline(disciplineService.getAcademicDiscipline(educationalMaterial.getAcademicDiscipline().getId()));
+        if (educationalMaterial.getReviewer().getId() == 0) {
             educationalMaterial.setReviewer(educationalMaterial.getAcademicDiscipline().getAuthor());
+        } else {
+            educationalMaterial.setReviewer(userService.getUser(educationalMaterial.getReviewer().getId()));
         }
-        educationalMaterial.setId(materialDAO.insertEducationalMaterial(educationalMaterial));
-        return educationalMaterial;
+        return materialDAO.insertEducationalMaterial(educationalMaterial);
     }
 
     @Override
-    public EducationalMaterial editEducationalMaterial(int id, EducationalMaterial educationalMaterial) {
+    public EducationalMaterial editEducationalMaterial(EducationalMaterial educationalMaterial, Long id) {
         EducationalMaterial material = materialDAO.findEducationalMaterial(String.valueOf(id));
         if (educationalMaterial.getName() != null) {
             material.setName(educationalMaterial.getName());
@@ -81,25 +87,27 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
             material.setDescription(educationalMaterial.getDescription());
         }
         if (educationalMaterial.getAcademicDiscipline() != null) {
-            material.setAcademicDiscipline(educationalMaterial.getAcademicDiscipline());
+            material.setAcademicDiscipline(disciplineService.getAcademicDiscipline(educationalMaterial.getAcademicDiscipline().getId()));
         }
         if (educationalMaterial.getAuthor() != null) {
-            material.setAuthor(educationalMaterial.getAuthor());
+            material.setAuthor(userService.getUser(educationalMaterial.getAuthor().getId()));
         }
         if (educationalMaterial.getReviewer() != null) {
-            material.setReviewer(educationalMaterial.getReviewer());
+            material.setReviewer(userService.getUser(educationalMaterial.getReviewer().getId()));
         }
-        materialDAO.updateEducationalMaterial(material);
-        return material;
+        if (educationalMaterial.getReviewStatus() != null) {
+            changeReviewStatus(educationalMaterial, id);
+        }
+        return materialDAO.updateEducationalMaterial(material);
     }
 
-    @Override
-    public EducationalMaterial makeReadyForReview(EducationalMaterial material) {
+//    @Override
+    private EducationalMaterial makeReadyForReview(EducationalMaterial material) {
         EducationalMaterial educationalMaterial = materialDAO.findEducationalMaterial(String.valueOf(material.getId()));
         if (isReadyForReviewReached(educationalMaterial)) {
-            if (isNotAuthor(educationalMaterial)) {
-                throw new EducationalMaterialException("The user doesnt have access to this action.");
-            }
+//            if (isNotAuthor(educationalMaterial)) {
+//                throw new EducationalMaterialException("The user doesnt have access to this action.");
+//            }
             educationalMaterial.setReviewStatus(MaterialStatus.READY_FOR_REVIEW);
             materialDAO.updateEducationalMaterial(educationalMaterial);
             return educationalMaterial;
@@ -116,15 +124,15 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
         return sessionService.getCurrentUser().equals(material.getAuthor());
     }
 
-    @Override
-    public EducationalMaterial reviewMaterial(EducationalMaterial material) {
+//    @Override
+    private EducationalMaterial reviewMaterial(EducationalMaterial material) {
         EducationalMaterial educationalMaterial = materialDAO.findEducationalMaterial(String.valueOf(material.getId()));
         if (educationalMaterial.getReviewStatus() != MaterialStatus.READY_FOR_REVIEW) {
             throw new EducationalMaterialException("Material with this status cannot be reviewed.");
         }
-        if (isNotReviewer(educationalMaterial)) {
-            throw new EducationalMaterialException("The user doesnt have access to this action.");
-        }
+//        if (isNotReviewer(educationalMaterial)) {
+//            throw new EducationalMaterialException("The user doesnt have access to this action.");
+//        }
 
         educationalMaterial.setReviewStatus(MaterialStatus.UNDER_REVIEW);
         materialDAO.updateEducationalMaterial(educationalMaterial);
@@ -135,28 +143,28 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
         return sessionService.getCurrentUser().equals(material.getReviewer());
     }
 
-    @Override
-    public EducationalMaterial backToReworkMaterial(EducationalMaterial material) {
+//    @Override
+    private EducationalMaterial backToReworkMaterial(EducationalMaterial material) {
         EducationalMaterial educationalMaterial = materialDAO.findEducationalMaterial(String.valueOf(material.getId()));
         if (educationalMaterial.getReviewStatus() != MaterialStatus.UNDER_REVIEW) {
             throw new EducationalMaterialException("Material with this status cannot be back to rework.");
         }
-        if (isNotReviewer(educationalMaterial)) {
-            throw new EducationalMaterialException("The user doesnt have access to this action.");
-        }
+//        if (isNotReviewer(educationalMaterial)) {
+//            throw new EducationalMaterialException("The user doesnt have access to this action.");
+//        }
 
         educationalMaterial.setReviewStatus(MaterialStatus.BACK_TO_REWORK);
         materialDAO.updateEducationalMaterial(educationalMaterial);
         return educationalMaterial;
     }
 
-    @Override
-    public EducationalMaterial cancelMaterial(EducationalMaterial material) {
+//    @Override
+    private EducationalMaterial cancelMaterial(EducationalMaterial material) {
         EducationalMaterial educationalMaterial = materialDAO.findEducationalMaterial(String.valueOf(material.getId()));
         if (mayBeCancelled(educationalMaterial)) {
-            if (isNotReviewer(educationalMaterial)) {
-                throw new EducationalMaterialException("The user doesnt have access to this action.");
-            }
+//            if (isNotReviewer(educationalMaterial)) {
+//                throw new EducationalMaterialException("The user doesnt have access to this action.");
+//            }
             educationalMaterial.setReviewStatus(MaterialStatus.CANCELLED);
             materialDAO.updateEducationalMaterial(educationalMaterial);
             return educationalMaterial;
@@ -170,15 +178,15 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
                 || material.getReviewStatus() == MaterialStatus.DRAFT;
     }
 
-    @Override
-    public EducationalMaterial approveMaterial(EducationalMaterial material) {
+//    @Override
+    private EducationalMaterial approveMaterial(EducationalMaterial material) {
         EducationalMaterial educationalMaterial = materialDAO.findEducationalMaterial(String.valueOf(material.getId()));
         if (educationalMaterial.getReviewStatus() != MaterialStatus.UNDER_REVIEW) {
             throw new EducationalMaterialException("Material with this status cannot be approved.");
         }
-        if (isNotReviewer(educationalMaterial)) {
-            throw new EducationalMaterialException("The user doesnt have access to this action.");
-        }
+//        if (isNotReviewer(educationalMaterial)) {
+//            throw new EducationalMaterialException("The user doesnt have access to this action.");
+//        }
 
         educationalMaterial.setReviewStatus(MaterialStatus.REVIEWED);
         educationalMaterial.setReviewFinishDate(LocalDateTime.now());
@@ -191,8 +199,26 @@ public class EducationalMaterialServiceImpl implements EducationalMaterialServic
         return materialDAO.findEducationalMaterial(String.valueOf(id));
     }
 
-    public Collection<EducationalMaterial> getAllUserEducationalMaterials() {
-        //if (sessionService.getCurrentUser().getRole() == UserRole)
+    @Override
+    public EducationalMaterial changeReviewStatus(EducationalMaterial educationalMaterial, Long id) {
+        if (educationalMaterial.getReviewStatus() == materialDAO.findEducationalMaterial(String.valueOf(id)).getReviewStatus()) {
+            throw new EducationalMaterialException("No status changes");
+        }
+        if (educationalMaterial.getReviewStatus() == MaterialStatus.REVIEWED) {
+            return approveMaterial(materialDAO.findEducationalMaterial(String.valueOf(id)));
+        }
+        if (educationalMaterial.getReviewStatus() == MaterialStatus.CANCELLED) {
+            return cancelMaterial(materialDAO.findEducationalMaterial(String.valueOf(id)));
+        }
+        if (educationalMaterial.getReviewStatus() == MaterialStatus.BACK_TO_REWORK) {
+            return backToReworkMaterial(materialDAO.findEducationalMaterial(String.valueOf(id)));
+        }
+        if (educationalMaterial.getReviewStatus() == MaterialStatus.UNDER_REVIEW) {
+            return reviewMaterial(materialDAO.findEducationalMaterial(String.valueOf(id)));
+        }
+        if (educationalMaterial.getReviewStatus() == MaterialStatus.READY_FOR_REVIEW) {
+            return makeReadyForReview(materialDAO.findEducationalMaterial(String.valueOf(id)));
+        }
         return null;
     }
 }

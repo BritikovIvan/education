@@ -14,17 +14,19 @@ public interface EducationalMaterialService {
 
     EducationalMaterial createEducationalMaterial(EducationalMaterial educationalMaterial);
 
-    EducationalMaterial editEducationalMaterial(int id, EducationalMaterial educationalMaterial);
+    EducationalMaterial editEducationalMaterial(EducationalMaterial educationalMaterial, Long id);
 
-    EducationalMaterial makeReadyForReview(EducationalMaterial material);
-
-    EducationalMaterial reviewMaterial(EducationalMaterial material);
-
-    EducationalMaterial backToReworkMaterial(EducationalMaterial material);
-
-    EducationalMaterial cancelMaterial(EducationalMaterial material);
-
-    EducationalMaterial approveMaterial(EducationalMaterial material);
+//    EducationalMaterial makeReadyForReview(EducationalMaterial material);
+//
+//    EducationalMaterial reviewMaterial(EducationalMaterial material);
+//
+//    EducationalMaterial backToReworkMaterial(EducationalMaterial material);
+//
+//    EducationalMaterial cancelMaterial(EducationalMaterial material);
+//
+//    EducationalMaterial approveMaterial(EducationalMaterial material);
 
     EducationalMaterial getEducationalDiscipline(Long id);
+
+    EducationalMaterial changeReviewStatus(EducationalMaterial educationalMaterial, Long id);
 }

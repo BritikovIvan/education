@@ -48,10 +48,9 @@ public class AcademicDisciplineHibernateDao implements AcademicDisciplineDAO {
     }
 
     @Override
-    public boolean updateAcademicDiscipline(AcademicDiscipline academicDiscipline) {
+    public AcademicDiscipline updateAcademicDiscipline(AcademicDiscipline academicDiscipline) {
         try {
-            AcademicDiscipline discipline = entityManager.merge(academicDiscipline);
-            return discipline != null;
+            return entityManager.merge(academicDiscipline);
         } finally {
             entityManager.close();
         }

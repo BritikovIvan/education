@@ -6,21 +6,17 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 
 @Repository
 public class UserHibernateDao implements UserDAO {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    public UserHibernateDao(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Long insertUser(User user) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.persist(user);
             return user.getId();
@@ -31,7 +27,6 @@ public class UserHibernateDao implements UserDAO {
 
     @Override
     public boolean deleteUser(String userId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             User user = entityManager.find(User.class, Integer.valueOf(userId));
             if (user != null) {
@@ -46,7 +41,6 @@ public class UserHibernateDao implements UserDAO {
 
     @Override
     public User findUser(String userId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.find(User.class, Long.valueOf(userId));
         } finally {
@@ -56,7 +50,6 @@ public class UserHibernateDao implements UserDAO {
 
     @Override
     public boolean updateUser(User user) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             User dbUser = entityManager.merge(user);
             return dbUser != null;
@@ -67,7 +60,6 @@ public class UserHibernateDao implements UserDAO {
 
     @Override
     public Collection<User> selectUsers() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createNamedQuery("User.findAll", User.class).getResultList();
         } finally {
@@ -77,10 +69,27 @@ public class UserHibernateDao implements UserDAO {
 
     @Override
     public User findUserByEmail(String email) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery("select u from User u where email = :email", User.class)
                     .setParameter("email", email).getSingleResult();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Collection<User> selectProfessors() {
+        try {
+            return entityManager.createQuery("select u from User u where role = 'PROFESSOR'", User.class).getResultList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Collection<User> selectTeachers() {
+        try {
+            return entityManager.createQuery("select u from User u where role = 'TEACHER'", User.class).getResultList();
         } finally {
             entityManager.close();
         }

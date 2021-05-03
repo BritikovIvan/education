@@ -51,7 +51,7 @@ public class EducationalMaterialMySQLDAO implements EducationalMaterialDAO {
     }
 
     @Override
-    public Long insertEducationalMaterial(EducationalMaterial educationalMaterial) {
+    public EducationalMaterial insertEducationalMaterial(EducationalMaterial educationalMaterial) {
         try (Connection connection = MySQLDAOFactory.getConnection();
              PreparedStatement ptmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS))
         {
@@ -113,7 +113,7 @@ public class EducationalMaterialMySQLDAO implements EducationalMaterialDAO {
     }
 
     @Override
-    public boolean updateEducationalMaterial(EducationalMaterial educationalMaterial) {
+    public EducationalMaterial updateEducationalMaterial(EducationalMaterial educationalMaterial) {
         try (Connection connection = MySQLDAOFactory.getConnection();
              PreparedStatement ptmt = connection.prepareStatement(UPDATE))
         {

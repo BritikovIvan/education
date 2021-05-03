@@ -89,7 +89,7 @@ public class AcademicDisciplineMySQLDAO implements AcademicDisciplineDAO {
     }
 
     @Override
-    public boolean updateAcademicDiscipline(AcademicDiscipline academicDiscipline) {
+    public AcademicDiscipline updateAcademicDiscipline(AcademicDiscipline academicDiscipline) {
         try (Connection connection = MySQLDAOFactory.getConnection();
              PreparedStatement ptmt = connection.prepareStatement(UPDATE))
         {
