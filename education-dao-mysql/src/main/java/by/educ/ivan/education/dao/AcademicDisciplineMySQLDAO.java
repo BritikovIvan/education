@@ -99,7 +99,7 @@ public class AcademicDisciplineMySQLDAO implements AcademicDisciplineDAO {
             ptmt.setLong(4, academicDiscipline.getAuthor().getId());
             ptmt.setLong(5, academicDiscipline.getId());
             int count = ptmt.executeUpdate();
-            return count == 1;
+            return academicDiscipline;
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }

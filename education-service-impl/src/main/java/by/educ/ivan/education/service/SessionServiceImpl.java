@@ -26,29 +26,12 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public User login(String email, String password) {
-        try {
-            User user = userService.getUserByEmail(email);
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                setUser(user);
-                user.setPassword(null);
-                return user;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            throw new DaoException(e);
-        }
-//        return null;
-    }
-
-    @Override
     public User getCurrentUser() {
         return sessionUser.get();
     }
 
-
-    private void setUser(User user) {
+    @Override
+    public void setCurrentUser(User user) {
         sessionUser.set(user);
     }
 

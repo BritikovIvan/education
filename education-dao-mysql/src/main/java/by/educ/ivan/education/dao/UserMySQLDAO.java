@@ -139,6 +139,16 @@ public class UserMySQLDAO implements UserDAO {
         }
     }
 
+    @Override
+    public Collection<User> selectProfessors() {
+        return null;
+    }
+
+    @Override
+    public Collection<User> selectTeachers() {
+        return null;
+    }
+
     private User setUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setId(rs.getLong(1));

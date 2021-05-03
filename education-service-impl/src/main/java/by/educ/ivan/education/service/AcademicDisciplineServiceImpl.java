@@ -34,9 +34,14 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService 
 //        }
 
 //        academicDiscipline.setAuthor(sessionService.getCurrentUser());
-        academicDiscipline.setAuthor(userService.getUserByEmail("qjamal.chafik.75t@gmailwe.com"));
+        academicDiscipline.setAuthor(getUserForCreate());
 
         return  disciplineDAO.insertAcademicDiscipline(academicDiscipline);
+    }
+
+    //private getUser
+    private User getUserForCreate() {
+        return userService.getUserByEmail("qjamal.chafik.75t@gmailwe.com");
     }
 
     @Override

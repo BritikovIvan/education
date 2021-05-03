@@ -76,7 +76,7 @@ public class EducationalMaterialMySQLDAO implements EducationalMaterialDAO {
                     throw new DaoException("Creating educational material failed, no ID obtained.");
                 }
             }
-            return educationalMaterial.getId();
+            return educationalMaterial;
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
@@ -128,7 +128,7 @@ public class EducationalMaterialMySQLDAO implements EducationalMaterialDAO {
             ptmt.setString(9, educationalMaterial.getDescription());
             ptmt.setLong(10, educationalMaterial.getId());
             int count = ptmt.executeUpdate();
-            return count == 1;
+            return educationalMaterial;
         } catch (SQLException ex) {
             throw new DaoException(ex);
         }
